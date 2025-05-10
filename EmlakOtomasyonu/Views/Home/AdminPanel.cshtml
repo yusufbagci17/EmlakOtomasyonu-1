@@ -1,0 +1,70 @@
+﻿@model IEnumerable<EmlakOtomasyonu.Models.IlanTablosu>
+
+@{
+    ViewData["Title"] = "Admin Panel";
+}
+
+<h2>İlanlar Listesi</h2>
+
+@if (TempData["Basari"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Basari"]
+    </div>
+}
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Başlık</th>
+            <th>Fiyat</th>
+            <th>Tarih</th>
+            <th>Kategori</th>
+            <th>İşlem</th>
+            <th>Vitrin Resim</th>
+            <th>Açıklama</th>
+            <th>İç Özellikler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ilan in Model)
+        {
+            var icOzellik = ilan.IcOzellik; 
+            <tr>
+                <td>@ilan.IlanBaslik</td>
+                <td>@ilan.IlanFiyat ₺</td>
+                <td>@ilan.IlanTarih?.ToShortDateString()</td>
+                <td>@ilan.IlanKategori?.KategoriAd</td>
+                <td>@ilan.IlanIslem?.IslemAd</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(ilan.IlanVitrin))
+                    {
+                        <img src="~/img/@ilan.IlanVitrin" width="100" />
+                    }
+                    else
+                    {
+                        <span>Yok</span>
+                    }
+                </td>
+                <td>@ilan.IlanAciklama</td>
+                <td>
+                    @if (icOzellik != null)
+                    {
+                        <ul style="list-style-type:none; padding-left:0;">
+                            <li>Asansör: @(icOzellik.IoAsansor ? "Var" : "Yok")</li>
+                            <li>Şömine: @(icOzellik.IoSomine ? "Var" : "Yok")</li>
+                            <li>Mobilya: @(icOzellik.IoMobilyaTakimi ? "Var" : "Yok")</li>
+                            <li>Duş Kabini: @(icOzellik.IoDusKabini ? "Var" : "Yok")</li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <span>Belirtilmemiş</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("IlanEkle", "Home")" class="btn btn-primary">Yeni İlan Ekle</a>
