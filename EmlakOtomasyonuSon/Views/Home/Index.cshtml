@@ -1,0 +1,126 @@
+﻿@model IEnumerable<EmlakOtomasyonuSon.Models.TblIlan>
+
+@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<div class="container mt-4">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card bg-dark text-white">
+                <div class="card-body p-5 text-center">
+                    <h1 class="display-4 mb-4">Hayalinizdeki Evi Bulun</h1>
+                    <p class="lead mb-4">Binlerce ilan arasından size en uygun evi, işyerini veya arsayı keşfedin.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="@Url.Action("Satilik", "Home")" class="btn btn-primary btn-lg">
+                            <i class="fas fa-tag me-2"></i>Satılık İlanlar
+                        </a>
+                        <a href="@Url.Action("Kiralik", "Home")" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-key me-2"></i>Kiralık İlanlar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Kategoriler -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-4">Kategoriler</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <a href="@Url.Action("FilteredIndex", "Home", new { kategoriId = 1 })" class="text-decoration-none">
+                        <div class="card property-card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-home fa-3x mb-3 text-primary"></i>
+                                <h3 class="card-title">Ev</h3>
+                                <p class="card-text">Konut ilanları</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="@Url.Action("FilteredIndex", "Home", new { kategoriId = 2 })" class="text-decoration-none">
+                        <div class="card property-card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-building fa-3x mb-3 text-primary"></i>
+                                <h3 class="card-title">İşyeri</h3>
+                                <p class="card-text">Ticari gayrimenkul ilanları</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="@Url.Action("FilteredIndex", "Home", new { kategoriId = 3 })" class="text-decoration-none">
+                        <div class="card property-card h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-map-marked-alt fa-3x mb-3 text-primary"></i>
+                                <h3 class="card-title">Arsa</h3>
+                                <p class="card-text">Arsa ve arazi ilanları</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Son Eklenen İlanlar -->
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center mb-4">Son Eklenen İlanlar</h2>
+            <div class="row g-4">
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-4">
+                        <div class="card property-card h-100">
+                            @if (!string.IsNullOrEmpty(item.IlanVResim))
+                            {
+                                <img src="@item.IlanVResim" class="card-img-top" alt="@item.IlanBaslik">
+                            }
+                            else
+                            {
+                                <img src="~/images/no-image.jpg" class="card-img-top" alt="Resim Yok">
+                            }
+                            <div class="card-body">
+                                <h5 class="card-title">@item.IlanBaslik</h5>
+                                <p class="card-text">
+                                    <i class="fas fa-phone me-2"></i>@item.IlanTelefon
+                                </p>
+                                <p class="card-text">
+                                    <i class="fas fa-tag me-2"></i>@item.TblKategori?.KategoriAd
+                                </p>
+                                <p class="card-text">
+                                    <i class="fas fa-money-bill-wave me-2"></i>@item.IlanFiyat.ToString("N0") TL
+                                </p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-primary">@item.TblIslem?.IslemAd</span>
+                                    <a href="@Url.Action("IlanDetay", "Home", new { id = item.IlanId })" class="btn btn-outline-primary">
+                                        <i class="fas fa-info-circle me-1"></i>Detaylar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .property-card {
+        transition: transform 0.3s ease;
+    }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+</style>

@@ -1,0 +1,389 @@
+﻿@model EmlakOtomasyonuSon.Models.IlanDetayViewModel
+
+@{
+    ViewData["Title"] = "İlan Düzenle";
+}
+
+<h2>İlan Düzenle</h2>
+
+<form asp-action="IlanDuzenle" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Ilan.IlanId" />
+    <input type="hidden" asp-for="Ilan.IlanKategoriId" />
+    <input type="hidden" asp-for="Ilan.IlanTarih" />
+
+    <div class="form-group mb-2">
+        <label asp-for="Ilan.IlanBaslik"></label>
+        <input asp-for="Ilan.IlanBaslik" class="form-control" />
+        <span asp-validation-for="Ilan.IlanBaslik" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-2">
+        <label asp-for="Ilan.IlanFiyat"></label>
+        <input asp-for="Ilan.IlanFiyat" class="form-control" />
+        <span asp-validation-for="Ilan.IlanFiyat" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-2">
+        <label asp-for="Ilan.IlanTelefon"></label>
+        <input asp-for="Ilan.IlanTelefon" class="form-control" />
+        <span asp-validation-for="Ilan.IlanTelefon" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-2">
+        <label asp-for="Ilan.IlanAciklama"></label>
+        <textarea asp-for="Ilan.IlanAciklama" class="form-control"></textarea>
+        <span asp-validation-for="Ilan.IlanAciklama" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-2">
+        <label asp-for="Ilan.IlanIslemId"></label>
+        <select asp-for="Ilan.IlanIslemId" class="form-control" asp-items="ViewBag.Islemler">
+            <option value="">Seçiniz</option>
+        </select>
+        <span asp-validation-for="Ilan.IlanIslemId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-2">
+        <label asp-for="Ilan.IlanVResim">Vitrin Resmi (Opsiyonel)</label>
+        <input type="file" name="Resim" class="form-control" accept="image/*" />
+        @if (!string.IsNullOrEmpty(Model.Ilan.IlanVResim))
+        {
+            <div class="mt-2">
+                <img src="@Model.Ilan.IlanVResim" alt="Vitrin Resmi" style="max-width:200px; max-height:200px;" />
+                <p class="text-muted">Mevcut vitrin resmi. Yeni bir resim yüklemezseniz bu resim korunacaktır.</p>
+            </div>
+        }
+    </div>
+
+    <!-- Mevcut Resimler -->
+    <div class="form-group mb-2">
+        <label>Mevcut Resimler</label>
+        <div class="row">
+            @if (Model.Ilan.TblResimm != null && Model.Ilan.TblResimm.Any())
+            {
+                foreach (var resim in Model.Ilan.TblResimm)
+                {
+                    <div class="col-md-3 mb-3">
+                        <div class="card">
+                            <img src="@resim.ResimYolu" class="card-img-top" alt="@resim.ResimAd">
+                            <div class="card-body">
+                                <button type="button" class="btn btn-danger btn-sm" onclick="resimSil(@resim.ResimId)">Sil</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <!-- Yeni Resim Ekleme -->
+    <div class="form-group mb-2">
+        <label>Yeni Resimler Ekle (Opsiyonel)</label>
+        <input type="file" name="DetayResimleri" multiple class="form-control" accept="image/*" />
+        <small class="text-muted">Yeni resim eklemek istemiyorsanız boş bırakabilirsiniz.</small>
+    </div>
+
+    <!-- Dinamik Özellikler -->
+    @if (Model.Ilan.IlanKategoriId == 1 && Model.EvOzellikleri != null)
+    {
+        <input type="hidden" asp-for="EvOzellikleri.EvOzellikId" />
+        <input type="hidden" asp-for="EvOzellikleri.IlanId" />
+        <hr />
+        <h4>Ev Özellikleri</h4>
+        <div class="row">
+            <div class="col-md-3"><label>Oda Sayısı</label><input type="number" asp-for="EvOzellikleri.OdaSayisi" class="form-control" /></div>
+            <div class="col-md-3"><label>Salon Sayısı</label><input type="number" asp-for="EvOzellikleri.SalonSayisi" class="form-control" /></div>
+            <div class="col-md-3"><label>Metrekare</label><input type="number" asp-for="EvOzellikleri.Metrekare" class="form-control" /></div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3"><label>Bina Yaşı</label><input type="number" asp-for="EvOzellikleri.BinaYasi" class="form-control" /></div>
+            <div class="col-md-3"><label>Bulunduğu Kat</label><input type="number" asp-for="EvOzellikleri.BulunduguKat" class="form-control" /></div>
+            <div class="col-md-3"><label>Kat Sayısı</label><input type="number" asp-for="EvOzellikleri.KatSayisi" class="form-control" /></div>
+            <div class="col-md-3"><label>Isıtma Türü</label><input type="text" asp-for="EvOzellikleri.IsitmaTuru" class="form-control" /></div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-2">
+                <label>Eşyalı mı?</label>
+                <select asp-for="EvOzellikleri.EsyaliMi" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Evet</option>
+                    <option value="false">Hayır</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Site İçerisinde mi?</label>
+                <select asp-for="EvOzellikleri.SiteİcerisindeMi" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Evet</option>
+                    <option value="false">Hayır</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-2">
+                <label>Asansör</label>
+                <select asp-for="EvOzellikleri.Asansor" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Şömine</label>
+                <select asp-for="EvOzellikleri.Somine" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Mobilya Takımı</label>
+                <select asp-for="EvOzellikleri.MobilyaTakimi" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Duş Kabini</label>
+                <select asp-for="EvOzellikleri.DusKabini" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Klima</label>
+                <select asp-for="EvOzellikleri.Klima" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Balkon</label>
+                <select asp-for="EvOzellikleri.Balkon" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-2">
+                <label>Jakuzi</label>
+                <select asp-for="EvOzellikleri.Jakuzi" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Otopark</label>
+                <select asp-for="EvOzellikleri.Otopark" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Oyun Parkı</label>
+                <select asp-for="EvOzellikleri.OyunParki" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Güvenlik</label>
+                <select asp-for="EvOzellikleri.Guvenlik" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Kapıcı</label>
+                <select asp-for="EvOzellikleri.Kapici" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Yüzme Havuzu</label>
+                <select asp-for="EvOzellikleri.YuzmeHavuzu" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-2">
+                <label>Spor Salonu</label>
+                <select asp-for="EvOzellikleri.SporSalonu" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+        </div>
+    }
+
+    @if (Model.Ilan.IlanKategoriId == 2 && Model.IsyeriOzellikleri != null)
+    {
+        <input type="hidden" asp-for="IsyeriOzellikleri.IsyeriOzellikId" />
+        <input type="hidden" asp-for="IsyeriOzellikleri.IlanId" />
+        <hr />
+        <h4>İşyeri Özellikleri</h4>
+        <div class="row">
+            <div class="col-md-3"><label>Metrekare</label><input type="number" asp-for="IsyeriOzellikleri.Metrekare" class="form-control" /></div>
+            <div class="col-md-3"><label>Bina Yaşı</label><input type="number" asp-for="IsyeriOzellikleri.BinaYasi" class="form-control" /></div>
+            <div class="col-md-3"><label>Bulunduğu Kat</label><input type="number" asp-for="IsyeriOzellikleri.BulunduguKat" class="form-control" /></div>
+            <div class="col-md-3"><label>Kat Sayısı</label><input type="number" asp-for="IsyeriOzellikleri.KatSayisi" class="form-control" /></div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3"><label>Isıtma Türü</label><input type="text" asp-for="IsyeriOzellikleri.IsitmaTuru" class="form-control" /></div>
+            <div class="col-md-3"><label>Kullanım Amacı</label><input type="text" asp-for="IsyeriOzellikleri.KullanimAmaci" class="form-control" /></div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-2">
+                <label>Asansör</label>
+                <select asp-for="IsyeriOzellikleri.Asansor" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Klima</label>
+                <select asp-for="IsyeriOzellikleri.Klima" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Balkon</label>
+                <select asp-for="IsyeriOzellikleri.Balkon" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Tuvalet</label>
+                <select asp-for="IsyeriOzellikleri.Tuvalet" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Otopark</label>
+                <select asp-for="IsyeriOzellikleri.Otopark" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Güvenlik</label>
+                <select asp-for="IsyeriOzellikleri.Guvenlik" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-2">
+                <label>Kapıcı</label>
+                <select asp-for="IsyeriOzellikleri.Kapici" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Depo</label>
+                <select asp-for="IsyeriOzellikleri.Depo" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+        </div>
+    }
+
+    @if (Model.Ilan.IlanKategoriId == 3 && Model.ArsaOzellikleri != null)
+    {
+        <input type="hidden" asp-for="ArsaOzellikleri.ArsaOzellikId" />
+        <input type="hidden" asp-for="ArsaOzellikleri.IlanId" />
+        <hr />
+        <h4>Arsa Özellikleri</h4>
+        <div class="row">
+            <div class="col-md-3"><label>Metrekare</label><input type="number" asp-for="ArsaOzellikleri.Metrekare" class="form-control" /></div>
+            <div class="col-md-3"><label>Metrekare Fiyatı</label><input type="number" asp-for="ArsaOzellikleri.MetrekareFiyati" class="form-control" /></div>
+            <div class="col-md-3"><label>İmar Durumu</label><input type="text" asp-for="ArsaOzellikleri.ImarDurumu" class="form-control" /></div>
+            <div class="col-md-3"><label>Tapu Durumu</label><input type="text" asp-for="ArsaOzellikleri.TapuDurumu" class="form-control" /></div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3"><label>Kullanım Amacı</label><input type="text" asp-for="ArsaOzellikleri.KullanimAmaci" class="form-control" /></div>
+            <div class="col-md-3"><label>Zemin Yapısı</label><input type="text" asp-for="ArsaOzellikleri.ZeminYapisi" class="form-control" /></div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-2">
+                <label>Elektrik</label>
+                <select asp-for="ArsaOzellikleri.ElektrikVar" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Su</label>
+                <select asp-for="ArsaOzellikleri.SuVar" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Doğalgaz</label>
+                <select asp-for="ArsaOzellikleri.DogalgazVar" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label>Yol</label>
+                <select asp-for="ArsaOzellikleri.YolVar" class="form-control">
+                    <option value="">Seçiniz</option>
+                    <option value="true">Var</option>
+                    <option value="false">Yok</option>
+                </select>
+            </div>
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary mt-3">Kaydet</button>
+    <a href="@Url.Action("Ilanlarim")" class="btn btn-secondary mt-3">Vazgeç</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        function resimSil(resimId) {
+            if (confirm('Bu resmi silmek istediğinizden emin misiniz?')) {
+                $.post('/Home/ResimSil', { resimId: resimId }, function(result) {
+                    if (result.success) {
+                        location.reload();
+                    } else {
+                        alert('Resim silinirken bir hata oluştu.');
+                    }
+                });
+            }
+        }
+    </script>
+}

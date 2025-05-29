@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Admin Panel";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Admin Panel</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Yeni İlan Ekle</h5>
+                                    <p class="card-text">Yeni bir emlak ilanı oluşturun.</p>
+                                    <a href="@Url.Action("YeniIlan")" class="btn btn-primary">
+                                        <i class="fas fa-plus"></i> Yeni İlan
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">İlanlarım</h5>
+                                    <p class="card-text">Mevcut ilanlarınızı görüntüleyin ve yönetin.</p>
+                                    <a href="@Url.Action("Ilanlarim")" class="btn btn-info">
+                                        <i class="fas fa-list"></i> İlanlarım
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card mb-3">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">İlan İstekleri</h5>
+                                    <p class="card-text">Gelen ilan isteklerini görüntüleyin ve yönetin.</p>
+                                    <a href="@Url.Action("IlanIstekleri")" class="btn btn-warning">
+                                        <i class="fas fa-envelope"></i> İstekler
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

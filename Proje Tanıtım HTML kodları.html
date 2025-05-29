@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emlak Platform Analizi: EmlakOtomasyonuSon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F0F4F8; /* Light Grey Blue */
+            color: #2D3748; /* Charcoal */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .section-title {
+            color: #FF6B6B; /* Lively Coral */
+        }
+        .stat-number {
+            color: #FF6B6B; /* Lively Coral */
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem; /* 12px */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem; /* 24px */
+            margin-bottom: 1.5rem; /* 24px */
+        }
+        .cover-section {
+            background: linear-gradient(135deg, #06D6A0 0%, #118AB2 100%); /* Bright Mint to Deep Cerulean */
+            color: white;
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+            margin-bottom: 2rem;
+        }
+        .cover-title {
+            font-size: 3rem; /* 48px */
+            line-height: 1.1;
+            font-weight: 700; /* bold */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .cover-subtitle {
+            font-size: 1.5rem; /* 24px */
+            line-height: 1.3;
+            font-weight: 600; /* semibold */
+            color: #FFD166; /* Sunny Yellow for subtitle */
+        }
+        .contributors-card {
+            background-color: rgba(31, 41, 55, 0.75); /* Tailwind gray-800 with 75% opacity - Koyu Arka Plan */
+            backdrop-filter: blur(8px); /* Daha belirgin bir cam efekti */
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Biraz daha opak sınır */
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3); /* Daha derin gölge */
+            border-radius: 0.75rem; /* Köşeleri yuvarlatılmış */
+            padding: 2rem; /* İç boşluk artırıldı */
+        }
+        .contributor-name {
+            color: #FFD166; /* Sunny Yellow */
+            font-weight: 600;
+        }
+         .contributors-card h3 { /* Projeyi Yapanlar başlığı */
+            color: #FFFFFF; /* Beyaz başlık */
+            border-bottom: 2px solid #FFD166; /* Sarı alt çizgi */
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .architecture-card { /* Mimari yapı kartı için özel stil */
+            background-color: #1F2937; /* Tailwind gray-800 - Koyu Gri */
+            color: #D1D5DB; /* Tailwind gray-300 - Açık Gri Metin */
+        }
+        .architecture-card h3 {
+            color: #FFD166; /* Sunny Yellow - Başlıklar için */
+        }
+         .architecture-card .flow-step h4 { /* Mimari içindeki flow-step başlıkları */
+            color: #4ECDC4; /* Aqua Green */
+        }
+        .architecture-card .flow-step { /* Mimari içindeki flow-step arkaplanı */
+            background-color: #374151; /* Tailwind gray-700 */
+            color: #D1D5DB; /* Açık Gri Metin */
+        }
+         .architecture-card .flow-step li .icon {
+             color: #FFD166; /* Sunny Yellow ikonlar */
+         }
+        .architecture-card .component-label {
+            color: #1F2937; /* Koyu Gri Metin (Arka plan açık renk olduğu için) */
+        }
+         .architecture-card .code-snippet-title {
+             color: #FFD166; /* Sunny Yellow */
+         }
+        .architecture-card .code-snippet-card { /* Kod örnekleri zaten koyu temalı, uyumlu */
+            border: 1px solid #4B5563; /* gray-600 */
+        }
+        .flow-step { 
+            background-color: #FFD166; /* Sunny Yellow - Genel flow-step */
+            color: #2D3748;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            text-align: left;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+            height: 100%; 
+            display: flex;
+            flex-direction: column;
+        }
+        .flow-step h4 {
+            font-weight: 600;
+            color: #118AB2; /* Deep Cerulean - Genel flow-step başlık */
+            margin-bottom: 0.5rem;
+        }
+        .flow-step ul {
+            list-style-type: none;
+            padding-left: 0;
+            flex-grow: 1; 
+        }
+        .flow-step li {
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: flex-start; 
+        }
+        .flow-step li .icon {
+            margin-right: 0.5rem;
+            color: #4ECDC4; /* Aqua Green - Genel ikonlar */
+            margin-top: 0.125rem; 
+        }
+        .flow-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem; 
+            color: #4ECDC4; /* Aqua Green */
+            padding: 0.5rem;
+        }
+         .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        .nav-link {
+            color: #4A5568; /* Medium Grey */
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #FF6B6B; /* Lively Coral */
+        }
+        .strength-card {
+            background-color: #4ECDC4; /* Aqua Green */
+            color: white;
+        }
+        .code-snippet-card {
+            background-color: #2D3748; /* Charcoal */
+            color: #F0F4F8; /* Light Grey Blue */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 0.5rem;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            overflow-x: auto;
+            height: 200px; 
+        }
+        .code-snippet-card pre {
+            margin: 0;
+            white-space: pre-wrap; 
+            word-break: break-all; 
+        }
+        .code-snippet-title {
+            font-weight: 600;
+            color: #FFD166; /* Sunny Yellow */
+            margin-bottom: 0.25rem;
+        }
+        .component-label {
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            text-align: center;
+            font-size: 0.875rem; 
+            font-weight: 600; 
+        }
+        .divider-line {
+            border-top: 2px dashed #4ECDC4; /* Aqua Green */
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- 
+        Infographic Plan Summary:
+        The infographic presents an analysis of the "EmlakOtomasyonuSon" platform.
+        Sections:
+        0. Cover Page: Title, Subtitle, Contributors.
+        1. Hero: Introduction and key technology.
+        2. Platform Capabilities: Managed real estate types (Doughnut Chart).
+        3. Technology Stack: Core technologies used (Bar Chart).
+        4. Feature Ecosystem: User-centric modules (Horizontal Bar Chart).
+        5. Architectural Structure: Detailed MVC framework, file interaction, and CODE SNIPPETS (HTML/CSS Diagram + Code Blocks).
+        6. Data Structure: Core database entities (Bubble Chart).
+        7. User Journey: New listing process (HTML/CSS Flow).
+        8. Strengths: Key advantages of the platform.
+        Color Palette: "Enerjik Vurgular" (Lively Coral, Sunny Yellow, Aqua Green, Deep Cerulean, Bright Mint).
+        No SVG or Mermaid JS used. All visualizations are Chart.js (Canvas) or HTML/CSS.
+    -->
+
+    <nav id="navbar" class="sticky-nav shadow-md py-3">
+        <div class="container mx-auto px-4">
+            <ul class="flex flex-wrap justify-center space-x-4 sm:space-x-6">
+                <li><a href="#cover" class="nav-link font-semibold text-sm sm:text-base">Kapak</a></li>
+                <li><a href="#hero" class="nav-link font-semibold text-sm sm:text-base">Giriş</a></li>
+                <li><a href="#segmentasyon" class="nav-link font-semibold text-sm sm:text-base">Platform Yetenekleri</a></li>
+                <li><a href="#teknoloji" class="nav-link font-semibold text-sm sm:text-base">Teknoloji Yığını</a></li>
+                <li><a href="#ekosistem" class="nav-link font-semibold text-sm sm:text-base">Özellik Ekosistemi</a></li>
+                <li><a href="#mimari" class="nav-link font-semibold text-sm sm:text-base">Mimari Yapı</a></li>
+                <li><a href="#veri" class="nav-link font-semibold text-sm sm:text-base">Veri Yapısı</a></li>
+                <li><a href="#surec" class="nav-link font-semibold text-sm sm:text-base">Kullanıcı Yolculuğu</a></li>
+                <li><a href="#guclu-yonler" class="nav-link font-semibold text-sm sm:text-base">Güçlü Yönler</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="cover" class="cover-section text-center">
+        <div class="container mx-auto px-4">
+            <h1 class="cover-title mb-4">Emlak Otomasyon Platformu</h1>
+            <p class="cover-subtitle mb-8">EmlakOtomasyonuSon Projesi: Sektör Analizi ve Teknik İnceleme</p>
+            
+            <div class="max-w-2xl mx-auto">
+                <div class="card contributors-card">
+                    <h3 class="text-2xl font-semibold mb-6 text-white">Projeyi Yapanlar</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                        <div>
+                            <p class="contributor-name text-lg">Harun Al</p>
+                            <p class="text-sm">Veri Tabanı, Backend</p>
+                        </div>
+                        <div>
+                            <p class="contributor-name text-lg">Veysel Elibol</p>
+                            <p class="text-sm">Azure, Veri Tabanı, Frontend</p>
+                        </div>
+                        <div>
+                            <p class="contributor-name text-lg">Muhammed Yusuf Bağcı</p>
+                            <p class="text-sm">Backend, Projeyi Raporlandırma</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <section id="hero" class="text-center py-12 md:py-16">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Emlak Otomasyon Sektörüne Derinlemesine Bakış</h1>
+            <h2 class="text-2xl md:text-3xl font-semibold section-title mb-6">EmlakOtomasyonuSon Platform Analizi</h2>
+
+            <div class="card max-w-md mx-auto">
+                <p class="text-xl font-semibold mb-2">Temel Teknolojiler</p>
+                <p class="stat-number text-4xl font-bold">.NET 8 & ASP.NET Core MVC</p>
+                <p class="text-gray-600 mt-2">Güçlü ve ölçeklenebilir bir altyapı üzerine kurulu.</p>
+            </div>
+        </section>
+
+        <section id="segmentasyon" class="py-8 md:py-12">
+            <h2 class="text-3xl font-bold text-center mb-4 section-title">Platform Yetenekleri: Yönetilen Gayrimenkul Türleri</h2>
+            <p class="text-center text-gray-700 mb-8 max-w-2xl mx-auto">Platform, farklı gayrimenkul ihtiyaçlarına cevap verebilmek adına çeşitli emlak türlerini yönetebilme kapasitesine sahiptir. Bu çeşitlilik, geniş bir kullanıcı kitlesine hitap etmeyi mümkün kılar.</p>
+            <div class="card md:col-span-2">
+                <div class="chart-container mx-auto" style="max-width: 400px; height: 350px;">
+                    <canvas id="propertyTypesChart"></canvas>
+                </div>
+                <p class="text-center mt-4 text-sm text-gray-600">Grafik, sistemde yönetilebilen temel gayrimenkul tiplerinin dağılımını göstermektedir (örnek verilerle). Her bir segment, platformun o alandaki yeteneklerini temsil eder.</p>
+            </div>
+        </section>
+
+        <section id="teknoloji" class="py-8 md:py-12">
+            <h2 class="text-3xl font-bold text-center mb-4 section-title">Teknoloji Yığını: Modern ve Güvenilir Altyapı</h2>
+            <p class="text-center text-gray-700 mb-8 max-w-2xl mx-auto">Platformun geliştirilmesinde kullanılan temel teknolojiler, güncel endüstri standartlarını yansıtmakta ve sistemin performans, güvenlik ve sürdürülebilirlik açısından güçlü olmasını sağlamaktadır.</p>
+            <div class="card">
+                <div class="chart-container" style="height: 400px; max-width: 700px; margin: auto;">
+                    <canvas id="techStackChart"></canvas>
+                </div>
+                <p class="text-center mt-4 text-sm text-gray-600">Bu bar grafik, projede kullanılan ana teknolojileri ve bunların platform içindeki önem seviyelerini (tümü yüksek) göstermektedir.</p>
+            </div>
+        </section>
+
+        <section id="ekosistem" class="py-8 md:py-12">
+            <h2 class="text-3xl font-bold text-center mb-4 section-title">Özellik Ekosistemi: Kullanıcı Odaklı Modüller</h2>
+            <p class="text-center text-gray-700 mb-8 max-w-2xl mx-auto">Sistem, kullanıcıların emlak yönetimi süreçlerini kolaylaştıran ve etkinleştiren kapsamlı modüllerden oluşur. Her bir modül, belirli bir işlevsel alanı adresler.</p>
+            <div class="card">
+                 <div class="chart-container" style="height: 350px; max-width: 700px; margin: auto;">
+                    <canvas id="modulesChart"></canvas>
+                </div>
+                <p class="text-center mt-4 text-sm text-gray-600">Grafik, platformun temel işlevsel modüllerini ve bunların sistem içindeki göreceli kapsamlarını veya önemini göstermektedir.</p>
+            </div>
+        </section>
+
+        <section id="mimari" class="py-8 md:py-12">
+            <h2 class="text-3xl font-bold text-center mb-4 section-title">Mimari Yapı: MVC Çerçevesi, Detaylı Dosya Etkileşimi ve Kod Örnekleri</h2>
+            <p class="text-center text-gray-700 mb-8 max-w-2xl mx-auto">EmlakOtomasyonuSon, ASP.NET Core MVC (Model-View-Controller) mimari deseni üzerine inşa edilmiştir. Bu yapı, uygulamanın bileşenlerini mantıksal olarak ayırarak kodun daha organize, sürdürülebilir ve test edilebilir olmasını sağlar. Aşağıda, bir kullanıcı isteğinin bu mimari içinde nasıl işlendiği, temel proje dosyalarının bu süreçteki rolleri ve bu dosyalardan örnek kod parçacıkları detaylandırılmıştır.</p>
+            
+            <div class="card architecture-card">
+                <h3 class="text-2xl font-semibold text-center mb-6">Genel İstek Akış Diyagramı ve Dosya Etkileşimi</h3>
+                
+                <div class="text-center mb-6">
+                    <div class="inline-block flow-step bg-gray-700 border border-gray-600 w-full md:w-3/4 lg:w-1/2">
+                        <h4 class="text-aqua-400"><span class="icon text-yellow-400">🌐</span>1. Kullanıcı İsteği (Tarayıcı)</h4>
+                        <p class="text-sm">Kullanıcı, tarayıcıdan bir URL'e erişir (GET) veya bir form gönderir (POST). Bu istek, ASP.NET Core uygulamasının Kestrel web sunucusuna ulaşır.</p>
+                    </div>
+                </div>
+
+                <div class="text-center my-4"><span class="flow-arrow text-aqua-400">&darr;</span></div>
+
+                <div class="flow-step">
+                    <h4><span class="icon">⚙️</span>2. Yapılandırma ve ASP.NET Core Pipeline</h4>
+                    <ul>
+                        <li><span class="icon">📄</span><strong>Program.cs:</strong> Uygulamanın ana giriş noktası.
+                            <ul class="ml-4 list-disc list-inside text-xs">
+                                <li>Servisler (Dependency Injection): `builder.Services.AddDbContext&lt;AppDbContext&gt;(...)`, `builder.Services.AddIdentity&lt;...&gt;(...)`, `builder.Services.AddControllersWithViews()` gibi servisler burada kaydedilir.</li>
+                                <li>Middleware Pipeline: `app.UseRouting()`, `app.UseAuthentication()`, `app.UseAuthorization()`, `app.MapControllerRoute(...)` gibi middleware'ler HTTP istek hattını oluşturur. İstek, bu hattan geçerek işlenir.</li>
+                            </ul>
+                        </li>
+                        <li><span class="icon">📄</span><strong>appsettings.json:</strong> Veritabanı bağlantı dizeleri (`DefaultConnection`), loglama ayarları ve diğer uygulama yapılandırmalarını içerir.</li>
+                    </ul>
+                    <p class="text-xs mt-2 text-gray-400">Routing middleware'i, isteğin URL'ine göre hangi Controller ve Action metodunun çalışacağını belirler.</p>
+                </div>
+
+                <div class="text-center my-4"><span class="flow-arrow text-aqua-400">&darr;</span></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+                    <div class="flow-step">
+                        <h4><span class="icon">📁</span>3. Controller Katmanı (`Controllers/`)</h4>
+                        <ul>
+                            <li><span class="icon">📄</span><strong>Örn: `HomeController.cs`, `IlanController.cs`</strong>
+                                <ul class="ml-4 list-disc list-inside text-xs">
+                                    <li>Belirlenen Action metodu (örn: `public IActionResult Index()`, `public async Task&lt;IActionResult&gt; IlanDetay(int id)`) çalıştırılır.</li>
+                                    <li>Gerekirse HTTP isteğinden gelen parametreleri (route data, query string, form data) alır.</li>
+                                    <li>İş mantığını yürütür: Model katmanından veri talep eder, verileri işler, ViewModel oluşturur.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <p class="text-xs mt-2 text-gray-400">Controller, Model ve View arasında bir orkestratör görevi görür.</p>
+                        <div class="component-label bg-red-500 border border-red-700 text-white">CONTROLLER</div>
+                    </div>
+
+                    <div class="flow-arrow hidden md:flex text-aqua-400">&rarr;</div>
+                    <div class="flow-arrow md:hidden text-center text-aqua-400">&darr;</div>
+
+                    <div class="flow-step">
+                        <h4><span class="icon">🧱</span>4. Model Katmanı & Veri Erişimi</h4>
+                        <ul>
+                            <li><span class="icon">📁</span><strong>Models/:</strong>
+                                <ul class="ml-4 list-disc list-inside text-xs">
+                                    <li><strong>Entity Sınıfları (örn: `TblIlan.cs`, `TblKategori.cs`):</strong> Veritabanı tablolarını temsil eden POCO sınıfları. Data Annotations (`[Key]`, `[Required]`) veya Fluent API ile tanımlanırlar.</li>
+                                    <li><strong>ViewModel Sınıfları (örn: `IlanDetayViewModel.cs`, `IlanDuzenleViewModel.cs`):</strong> View'lere özel, bir veya daha fazla entity'den veya ek verilerden oluşan veri taşıma nesneleridir.</li>
+                                </ul>
+                            </li>
+                            <li><span class="icon">📁</span><strong>Data/:</strong>
+                                <ul class="ml-4 list-disc list-inside text-xs">
+                                    <li><strong>DbContext Sınıfları (örn: `AppDbContext.cs`, `ApplicationDbContext.cs`):</strong> Entity Framework Core'un veritabanı ile etkileşimini yönetir. `DbSet&lt;TEntity&gt;` property'leri aracılığıyla tablolara erişim sağlar. Veritabanı sorguları (LINQ to Entities) burada yürütülür.</li>
+                                </ul>
+                            </li>
+                            <li><span class="icon">💾</span><strong>Veritabanı (SQL Server - `DbEmlakOtomasyonu`):</strong> Uygulamanın kalıcı verilerinin saklandığı yer.</li>
+                        </ul>
+                        <p class="text-xs mt-2 text-gray-400">Veri doğrulama, iş kuralları ve veritabanı CRUD (Create, Read, Update, Delete) işlemleri bu katmanda gerçekleşir.</p>
+                        <div class="component-label bg-green-500 border border-green-700 text-white">MODEL</div>
+                    </div>
+                    
+                    <div class="flow-arrow hidden md:flex text-aqua-400">&rarr;</div> <div class="flow-arrow md:hidden text-center text-aqua-400">&darr;</div>
+
+
+                    <div class="flow-step">
+                         <h4><span class="icon">🖼️</span>5. View Katmanı (`Views/`)</h4>
+                        <ul>
+                             <li><span class="icon">📁</span><strong>ControllerAdı/ (örn: `Home/`, `Ilan/`):</strong>
+                                <ul class="ml-4 list-disc list-inside text-xs">
+                                    <li><strong>ActionAdı.cshtml (örn: `Index.cshtml`, `IlanDetay.cshtml`):</strong> Controller'dan gelen Model (genellikle bir ViewModel) verilerini kullanarak dinamik HTML üretir. Razor sözdizimi (`@model`, `@foreach`, `@if` vb.) kullanılır.</li>
+                                </ul>
+                            </li>
+                             <li><span class="icon">📁</span><strong>Shared/:</strong>
+                                <ul class="ml-4 list-disc list-inside text-xs">
+                                    <li><strong>`_Layout.cshtml` (Ana Şablon):</strong> Sitenin genel HTML yapısını (başlık, menü, altbilgi, script/stil referansları) içerir. `@RenderBody()` ile action'a özel view içeriği buraya yerleşir.</li>
+                                    <li><strong>Kısmi View'lar (`_PartialName.cshtml`):</strong> Tekrar kullanılabilir UI parçacıklarıdır.</li>
+                                </ul>
+                            </li>
+                             <li><span class="icon">📄</span><strong>`_ViewImports.cshtml`:</strong> View'larda sık kullanılan namespace'leri ve tag helper'ları import eder.</li>
+                        </ul>
+                        <p class="text-xs mt-2 text-gray-400">Kullanıcıya sunulacak son HTML çıktısı burada oluşturulur.</p>
+                        <div class="component-label bg-blue-500 border border-blue-700 text-white">VIEW</div>
+                    </div>
+                </div>
+                
+                <div class="text-center my-4"><span class="flow-arrow text-aqua-400">&darr;</span></div>
+
+                <div class="text-center">
+                     <div class="inline-block flow-step bg-gray-700 border border-gray-600 w-full md:w-3/4 lg:w-1/2">
+                        <h4 class="text-aqua-400"><span class="icon text-yellow-400">💻</span>6. Kullanıcıya Yanıt (Tarayıcı)</h4>
+                        <p class="text-sm">Oluşturulan HTML, CSS (genellikle `wwwroot/css/site.css` ve Bootstrap) ve JavaScript (genellikle `wwwroot/js/site.js` ve jQuery) tarayıcıya HTTP yanıtı olarak gönderilir. Tarayıcı bu kaynakları işleyerek sayfayı kullanıcıya görüntüler.</p>
+                        <ul><li><span class="icon text-yellow-400">📁</span><strong>wwwroot/:</strong> Statik dosyalar (CSS, JS, resimler, kütüphaneler) burada bulunur.</li></ul>
+                    </div>
+                </div>
+                <p class="text-center mt-6 text-sm text-gray-400">Bu detaylı akış, MVC bileşenlerinin ve projenin temel klasör/dosya yapısının bir kullanıcı isteğini işlemek için nasıl senkronize çalıştığını göstermektedir. Her katman, belirli sorumlulukları üstlenerek modüler ve bakımı kolay bir sistem oluşturur.</p>
+            </div>
+
+            <div class="card architecture-card mt-8">
+                <h3 class="text-2xl font-semibold text-center mb-6">Temel Proje Dosyalarından Örnek Kodlar</h3>
+                <div class="divider-line"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-lg font-semibold mb-2 text-yellow-400">📄 Program.cs (Servis Kayıtları ve Middleware)</h4>
+                        <p class="text-sm text-gray-400 mb-2">Uygulamanın başlangıç yapılandırması burada yapılır. Veritabanı bağlantısı (DbContext), Controller'lar ve View'lar gibi temel servisler kaydedilir. HTTP istek hattı (middleware pipeline) tanımlanır.</p>
+                        <div class="code-snippet-card">
+                        <div class="code-snippet-title">Örnek: DbContext ve MVC Servisleri</div>
+                        <pre><code>
+// using Microsoft.EntityFrameworkCore;
+// using EmlakOtomasyonuSon.Data;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddDbContext&lt;AppDbContext&gt;(options =>
+    options.UseSqlServer(builder.Configuration
+        .GetConnectionString("DefaultConnection")));
+
+// Eğer ASP.NET Core Identity kullanılıyorsa:
+// builder.Services.AddDefaultIdentity&lt;IdentityUser&gt;(options => 
+//    options.SignIn.RequireConfirmedAccount = true)
+//    .AddEntityFrameworkStores&lt;ApplicationDbContext&gt;();
+
+builder.Services.AddControllersWithViews();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts(); // HTTPS zorunluluğu
+}
+
+app.UseHttpsRedirection();
+app.UseStaticFiles(); // wwwroot klasöründeki statik dosyalar için
+
+app.UseRouting(); // Yönlendirme middleware'i
+
+// app.UseAuthentication(); // Kimlik doğrulama (Identity varsa)
+// app.UseAuthorization(); // Yetkilendirme (Identity varsa)
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+// app.MapRazorPages(); // Razor Pages kullanılıyorsa
+
+app.Run();
+                        </code></pre>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-semibold mb-2 text-yellow-400">📁 Controllers/HomeController.cs (Action Metodu)</h4>
+                        <p class="text-sm text-gray-400 mb-2">Kullanıcı isteklerini işleyen metotları (action'lar) içerir. Bu örnekte, ana sayfa için bir action gösterilmektedir. `AppDbContext` üzerinden veri alıp `View`'e gönderebilir.</p>
+                        <div class="code-snippet-card">
+                        <div class="code-snippet-title">Örnek: Index Action</div>
+                        <pre><code>
+// using Microsoft.AspNetCore.Mvc;
+// using EmlakOtomasyonuSon.Data;
+// using EmlakOtomasyonuSon.Models;
+// using System.Linq;
+
+public class HomeController : Controller
+{
+    private readonly AppDbContext _context;
+    private readonly ILogger&lt;HomeController&gt; _logger;
+
+    public HomeController(ILogger&lt;HomeController&gt; logger, 
+                          AppDbContext context)
+    {
+        _logger = logger;
+        _context = context;
+    }
+
+    public IActionResult Index()
+    {
+        // Örnek: Veritabanından ilk 5 ilanı çekip View'e gönderme
+        // var oneCikanIlanlar = _context.TblIlans
+        //โซ    .OrderByDescending(i => i.IlanTarihi)
+        //โซ    .Take(5)
+        //โซ    .ToList();
+        // return View(oneCikanIlanlar);
+        return View(); // Model olmadan View döndürme
+    }
+    // ... diğer action'lar (Login, IlanDetay, Privacy, Error vb.)
+}
+                        </code></pre>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-semibold mb-2 text-yellow-400">🧱 Models/TblIlan.cs (Entity Sınıfı)</h4>
+                        <p class="text-sm text-gray-400 mb-2">Veritabanındaki `TblIlan` tablosuna karşılık gelen C# sınıfıdır. İlanın özelliklerini (property) tanımlar. Entity Framework Core bu sınıfı kullanarak tablo oluşturur ve veri işlemlerini yapar.</p>
+                        <div class="code-snippet-card">
+                        <div class="code-snippet-title">Örnek: TblIlan Entity</div>
+                        <pre><code>
+// using System.ComponentModel.DataAnnotations;
+// using System.ComponentModel.DataAnnotations.Schema;
+
+public partial class TblIlan
+{
+    [Key] // Primary Key
+    public int IlanId { get; set; }
+
+    [Required(ErrorMessage = "Başlık alanı zorunludur.")]
+    [StringLength(200, ErrorMessage = "Başlık en fazla 200 karakter olabilir.")]
+    public string? Baslik { get; set; }
+
+    public string? Aciklama { get; set; }
+
+    [Column(TypeName = "decimal(18, 2)")]
+    public decimal? Fiyat { get; set; }
+
+    public int? KategoriId { get; set; } // Foreign Key
+    
+    [StringLength(100)]
+    public string? Sehir { get; set; }
+    // ... diğer property'ler (Mahalle, Ilce, AdresDetay, Metrekare vb.)
+
+    // Navigation Property
+    [ForeignKey("KategoriId")]
+    public virtual TblKategori? KategoriNavigation { get; set; }
+    public virtual ICollection&lt;TblResimm&gt; TblResimms { get; set; } = new List&lt;TblResimm&gt;();
+}
+                        </code></pre>
+                        </div>
+                    </div>
+
+                     <div>
+                        <h4 class="text-lg font-semibold mb-2 text-yellow-400">🧱 Models/IlanDetayViewModel.cs (ViewModel)</h4>
+                        <p class="text-sm text-gray-400 mb-2">Bir View'in ihtiyaç duyduğu verileri tek bir nesnede toplamak için kullanılır. Birden fazla entity'den veya farklı kaynaklardan gelen verileri birleştirebilir.</p>
+                        <div class="code-snippet-card">
+                        <div class="code-snippet-title">Örnek: IlanDetayViewModel</div>
+                        <pre><code>
+// using EmlakOtomasyonuSon.Models; // Entity sınıfları için
+// using System.Collections.Generic;
+
+public class IlanDetayViewModel
+{
+    public TblIlan IlanBilgisi { get; set; }
+    public TblEvOzellikleri? EvOzellikDetaylari { get; set; }
+    public TblArsaOzellikleri? ArsaOzellikDetaylari { get; set; }
+    public TblIsyeri? IsyeriOzellikDetaylari { get; set; }
+    public List&lt;TblResimm&gt; IlanResimleri { get; set; }
+    public string IlanSahibiAdi { get; set; } // Örnek ek bilgi
+    public bool FavorilerdeMi { get; set; } // Kullanıcıya özel ek bilgi
+    // ... View'in ihtiyaç duyacağı diğer veriler
+}
+                        </code></pre>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-semibold mb-2 text-yellow-400">💾 Data/AppDbContext.cs (Veritabanı Bağlamı)</h4>
+                        <p class="text-sm text-gray-400 mb-2">Entity Framework Core'un veritabanı ile iletişim kurmasını sağlayan sınıftır. Veritabanı tablolarına karşılık gelen `DbSet` property'lerini içerir.</p>
+                        <div class="code-snippet-card">
+                        <div class="code-snippet-title">Örnek: AppDbContext</div>
+                        <pre><code>
+// using Microsoft.EntityFrameworkCore;
+// using EmlakOtomasyonuSon.Models; // Entity sınıfları için
+
+public partial class AppDbContext : DbContext
+{
+    public AppDbContext(DbContextOptions&lt;AppDbContext&gt; options)
+        : base(options) { }
+
+    public virtual DbSet&lt;TblAdmin&gt; TblAdmins { get; set; }
+    public virtual DbSet&lt;TblArsaOzellikleri&gt; TblArsaOzellikleris { get; set; }
+    public virtual DbSet&lt;TblEvOzellikleri&gt; TblEvOzellikleris { get; set; }
+    public virtual DbSet&lt;TblIlan&gt; TblIlans { get; set; }
+    public virtual DbSet&lt;TblIslem&gt; TblIslems { get; set; }
+    public virtual DbSet&lt;TblKategori&gt; TblKategoris { get; set; }
+    public virtual DbSet&lt;TblResimm&gt; TblResimms { get; set; }
+    public virtual DbSet&lt;TblIsyeri&gt; TblIsyeris { get; set; }
+    // ... diğer DbSet'ler
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Fluent API ile model yapılandırmaları (ilişkiler, kısıtlamalar vb.)
+        // modelBuilder.Entity&lt;TblIlan&gt;(entity =>
+        // {
+        //     entity.HasOne(d => d.KategoriNavigation)
+        //         .WithMany(p => p.TblIlans)
+        //         .HasForeignKey(d => d.KategoriId)
+        //         .HasConstraintName("FK_TblIlan_TblKategori");
+        // });
+        OnModelCreatingPartial(modelBuilder);
+    }
+    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+}
+                        </code></pre>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-semibold mb-2 text-yellow-400">🖼️ Views/Home/Index.cshtml (Razor View)</h4>
+                        <p class="text-sm text-gray-400 mb-2">Kullanıcıya gösterilecek HTML'i dinamik olarak üretir. C# kodu (Razor sözdizimi) ve HTML içerir. Model'den gelen verileri kullanarak sayfayı oluşturur.</p>
+                        <div class="code-snippet-card">
+                        <div class="code-snippet-title">Örnek: Basit View Yapısı</div>
+                        <pre><code>
+@* View'e gönderilen model tipini belirtir *@
+@* @model IEnumerable&lt;EmlakOtomasyonuSon.Models.TblIlan&gt; *@
+@model EmlakOtomasyonuSon.Models.IlanDetayViewModel 
+
+@{
+    ViewData["Title"] = Model?.IlanBilgisi?.Baslik ?? "İlan Detayı";
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Ana şablonu belirtir
+}
+
+&lt;div class="container mt-4"&gt;
+    @if (Model?.IlanBilgisi != null)
+    {
+        &lt;h1&gt;@Model.IlanBilgisi.Baslik&lt;/h1&gt;
+        &lt;p class="text-muted"&gt;Fiyat: @Model.IlanBilgisi.Fiyat?.ToString("C")&lt;/p&gt;
+        &lt;hr /&gt;
+        &lt;div&gt;
+            @Html.Raw(Model.IlanBilgisi.Aciklama)
+        &lt;/div&gt;
+        
+        @* Resimleri gösterme örneği *@
+        @if (Model.IlanResimleri != null && Model.IlanResimleri.Any())
+        {
+            &lt;h3&gt;Resimler&lt;/h3&gt;
+            &lt;div class="row"&gt;
+            @foreach (var resim in Model.IlanResimleri)
+            {
+                &lt;div class="col-md-3"&gt;
+                    &lt;img src="@Url.Content(resim.ResimYolu)" alt="İlan Resmi" class="img-fluid rounded mb-2" /&gt;
+                &lt;/div&gt;
+            }
+            &lt;/div&gt;
+        }
+    }
+    else
+    {
+        &lt;p class="alert alert-warning"&gt;İlan bilgileri bulunamadı.&lt;/p&gt;
+    }
+&lt;/div&gt;
+
+@section Scripts {
+    &lt;!-- Bu sayfaya özel script'ler buraya eklenebilir --&gt;
+}
+                        </code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="veri" class="py-8 md:py-12">
+            <h2 class="text-3xl font-bold text-center mb-4 section-title">Veri Yapısı Analizi: Temel Veritabanı Varlıkları</h2>
+            <p class="text-center text-gray-700 mb-8 max-w-2xl mx-auto">Platformun kalbinde, iyi yapılandırılmış bir veritabanı yatmaktadır. Bu bölümde, sistemin temel veri varlıkları ve bunların tahmini karmaşıklık/önem düzeyleri incelenmektedir.</p>
+            <div class="card">
+                <div class="chart-container" style="height: 450px; max-width: 700px; margin: auto;">
+                    <canvas id="databaseEntitiesChart"></canvas>
+                </div>
+                <p class="text-center mt-4 text-sm text-gray-600">Kabarcık grafiği, temel veritabanı tablolarını ve tahmini göreceli önemlerini/karmaşıklıklarını (alan sayısı veya ilişkiler bazında) göstermektedir.</p>
+            </div>
+        </section>
+
+        <section id="surec" class="py-8 md:py-12">
+            <h2 class="text-3xl font-bold text-center mb-4 section-title">Örnek Kullanıcı Yolculuğu: Yeni İlan Ekleme Süreci</h2>
+            <p class="text-center text-gray-700 mb-8 max-w-2xl mx-auto">Platformun kullanıcı dostu arayüzü ve etkili süreç yönetimi, temel işlemlerin kolaylıkla gerçekleştirilmesini sağlar. Aşağıda, yeni bir emlak ilanı ekleme sürecinin adımları gösterilmektedir.</p>
+            <div class="card">
+                <h3 class="text-xl font-semibold text-center mb-6">Yeni İlan Ekleme Adımları</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center">
+                        <div class="bg-blue-500 text-white rounded-full h-8 w-8 flex items-center justify-center font-bold mr-3">1</div>
+                        <p>Kullanıcı sisteme giriş yapar ve "Yeni İlan Ekle" sayfasına erişir.</p>
+                    </div>
+                    <div class="ml-5 pl-6 border-l-2 border-blue-500">
+                        <p class="text-sm text-gray-600">Sistem, boş ilan formunu ve gerekli listeleri (kategoriler vb.) hazırlar.</p>
+                    </div>
+
+                    <div class="flex items-center">
+                        <div class="bg-blue-500 text-white rounded-full h-8 w-8 flex items-center justify-center font-bold mr-3">2</div>
+                        <p>Kullanıcı ilan formunu (başlık, fiyat, kategori, adres, özellikler, resimler) doldurur ve gönderir.</p>
+                    </div>
+                     <div class="ml-5 pl-6 border-l-2 border-blue-500">
+                        <p class="text-sm text-gray-600">Form verileri sunucuya iletilir.</p>
+                    </div>
+
+                    <div class="flex items-center">
+                        <div class="bg-blue-500 text-white rounded-full h-8 w-8 flex items-center justify-center font-bold mr-3">3</div>
+                        <p>Sunucu tarafında veriler doğrulanır.</p>
+                    </div>
+                     <div class="ml-5 pl-6 border-l-2 border-blue-500">
+                        <p class="text-sm text-gray-600">Geçerliyse, yeni ilan, özellikleri ve resimleri için veritabanı nesneleri oluşturulur.</p>
+                    </div>
+
+                    <div class="flex items-center">
+                        <div class="bg-blue-500 text-white rounded-full h-8 w-8 flex items-center justify-center font-bold mr-3">4</div>
+                        <p>Resimler sunucuya yüklenir ve yolları kaydedilir.</p>
+                    </div>
+
+                    <div class="flex items-center">
+                        <div class="bg-blue-500 text-white rounded-full h-8 w-8 flex items-center justify-center font-bold mr-3">5</div>
+                        <p>Tüm veriler (ilan, özellikler, resimler) veritabanına kaydedilir.</p>
+                    </div>
+                     <div class="ml-5 pl-6 border-l-2 border-blue-500">
+                        <p class="text-sm text-gray-600">`SaveChangesAsync` ile işlem tamamlanır.</p>
+                    </div>
+
+                    <div class="flex items-center">
+                        <div class="bg-blue-500 text-white rounded-full h-8 w-8 flex items-center justify-center font-bold mr-3">6</div>
+                        <p>Kullanıcıya başarı mesajı gösterilir ve ilgili sayfaya yönlendirilir (ilan listesi veya detay).</p>
+                    </div>
+                </div>
+                <p class="text-center mt-6 text-sm text-gray-600">Bu adımlar, platformun temel bir işlevinin nasıl kullanıcı dostu ve sistematik bir şekilde çalıştığını göstermektedir.</p>
+            </div>
+        </section>
+
+        <section id="guclu-yonler" class="py-8 md:py-12">
+            <h2 class="text-3xl font-bold text-center mb-4 section-title">Platformun Öne Çıkan Güçlü Yönleri</h2>
+            <p class="text-center text-gray-700 mb-8 max-w-2xl mx-auto">EmlakOtomasyonuSon platformu, modern teknolojileri ve kullanıcı odaklı tasarımıyla bir dizi önemli avantaja sahiptir. Bu avantajlar, platformun pazardaki rekabet gücünü artırmaktadır.</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card strength-card">
+                    <h3 class="text-xl font-semibold mb-2">Modern Teknoloji Yığını</h3>
+                    <p>.NET 8, ASP.NET Core MVC ve EF Core kullanımı; performans, güvenlik ve ölçeklenebilirlik sağlar.</p>
+                </div>
+                <div class="card strength-card">
+                    <h3 class="text-xl font-semibold mb-2">Organize MVC Mimarisi</h3>
+                    <p>Kodun bakımı kolaylaşır, geliştirmeler modüler ve verimli bir şekilde yapılabilir.</p>
+                </div>
+                <div class="card strength-card">
+                    <h3 class="text-xl font-semibold mb-2">Detaylı Veritabanı Tasarımı</h3>
+                    <p>Farklı emlak tipleri için esnek ve kapsamlı veri modeli sunar.</p>
+                </div>
+                <div class="card strength-card">
+                    <h3 class="text-xl font-semibold mb-2">Etkili ViewModel Kullanımı</h3>
+                    <p>Controller ve View arasındaki veri akışını optimize eder, arayüzlerin temiz kalmasını sağlar.</p>
+                </div>
+                <div class="card strength-card">
+                    <h3 class="text-xl font-semibold mb-2">İstemci Tarafı İyileştirmeler</h3>
+                    <p>Bootstrap ve jQuery Validation gibi araçlarla kullanıcı deneyimi ve arayüz kullanılabilirliği artırılır.</p>
+                </div>
+                 <div class="card strength-card">
+                    <h3 class="text-xl font-semibold mb-2">Güvenli Kimlik Yönetimi</h3>
+                    <p>ASP.NET Core Identity ile standart ve robust kullanıcı kimlik doğrulama ve yetkilendirme imkanı sunar.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center py-8 text-gray-600 border-t mt-12">
+            <p>&copy; <span id="currentYear"></span> Emlak Platform Analizi. Tüm hakları saklıdır.</p>
+
+        </footer>
+
+    </div>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            }
+            return label;
+        };
+
+        const commonChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#2D3748',
+                        font: { size: 13, family: 'Inter' }
+                    }
+                },
+                tooltip: {
+                    callbacks: { title: tooltipTitleCallback },
+                    titleFont: { family: 'Inter', size: 14 },
+                    bodyFont: { family: 'Inter', size: 12 },
+                    backgroundColor: 'rgba(45, 55, 72, 0.9)',
+                    titleColor: '#FFFFFF',
+                    bodyColor: '#FFFFFF',
+                    padding: 10,
+                    cornerRadius: 4
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { color: '#4A5568', font: { family: 'Inter' } },
+                    grid: { display: false }
+                },
+                y: {
+                    ticks: { color: '#4A5568', font: { family: 'Inter' } },
+                    grid: { color: '#E2E8F0' }
+                }
+            }
+        };
+        
+        const chartColors = ['#FF6B6B', '#FFD166', '#4ECDC4', '#9758A7', '#06D6A0', '#118AB2'];
+
+        function wrapLabel(str, maxWidth) {
+            if (str.length <= maxWidth) return str;
+            const words = str.split(' ');
+            let currentLine = '';
+            const lines = [];
+            for (const word of words) {
+                if ((currentLine + word).length <= maxWidth) {
+                    currentLine += word + ' ';
+                } else {
+                    lines.push(currentLine.trim());
+                    currentLine = word + ' ';
+                }
+            }
+            lines.push(currentLine.trim());
+            return lines.filter(line => line.length > 0);
+        }
+
+        const propertyTypesCtx = document.getElementById('propertyTypesChart').getContext('2d');
+        new Chart(propertyTypesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Konut', 'İş Yeri', 'Arsa'],
+                datasets: [{
+                    label: 'Yönetilen Gayrimenkul Türleri',
+                    data: [50, 30, 20],
+                    backgroundColor: [chartColors[0], chartColors[1], chartColors[2]],
+                    borderColor: '#FFFFFF',
+                    borderWidth: 2
+                }]
+            },
+            options: { ...commonChartOptions, cutout: '60%' }
+        });
+
+        const techStackCtx = document.getElementById('techStackChart').getContext('2d');
+        const techLabels = ['C#', '.NET 8', ['ASP.NET Core', 'MVC'], ['Entity Framework', 'Core'], ['MS SQL', 'Server'], 'Bootstrap', 'jQuery'];
+        new Chart(techStackCtx, {
+            type: 'bar',
+            data: {
+                labels: techLabels,
+                datasets: [{
+                    label: 'Kullanım/Önem Düzeyi',
+                    data: [100, 100, 100, 95, 95, 90, 85],
+                    backgroundColor: chartColors[3],
+                    borderColor: chartColors[3],
+                    borderWidth: 1,
+                    borderRadius: 4,
+                }]
+            },
+            options: { ...commonChartOptions, scales: { ...commonChartOptions.scales, x: { ...commonChartOptions.scales.x, ticks: {...commonChartOptions.scales.x.ticks, maxRotation: 0, minRotation: 0 }} } }
+        });
+        
+        const modulesCtx = document.getElementById('modulesChart').getContext('2d');
+        const moduleLabels = [wrapLabel('İlan Yönetimi', 16), wrapLabel('Kullanıcı ve Admin Yönetimi', 16), wrapLabel('Kategori Yönetimi', 16), wrapLabel('İlan İstekleri ve İletişim', 16)];
+        new Chart(modulesCtx, {
+            type: 'bar',
+            data: {
+                labels: moduleLabels,
+                datasets: [{
+                    label: 'Modül Kapsamı/Önemi',
+                    data: [90, 85, 75, 70],
+                    backgroundColor: chartColors,
+                    borderColor: chartColors,
+                    borderWidth: 1,
+                    borderRadius: 4,
+                }]
+            },
+             options: { ...commonChartOptions, indexAxis: 'y' }
+        });
+
+        const databaseEntitiesCtx = document.getElementById('databaseEntitiesChart').getContext('2d');
+        new Chart(databaseEntitiesCtx, {
+            type: 'bubble',
+            data: {
+                datasets: [
+                    { label: 'TblIlan', data: [{x: 10, y: 20, r: 25}], backgroundColor: chartColors[0] },
+                    { label: 'TblKullanici (Identity)', data: [{x: 15, y: 25, r: 22}], backgroundColor: chartColors[1] },
+                    { label: 'TblEvOzellikleri', data: [{x: 20, y: 10, r: 18}], backgroundColor: chartColors[2] },
+                    { label: 'TblArsaOzellikleri', data: [{x: 25, y: 18, r: 17}], backgroundColor: chartColors[3] },
+                    { label: 'TblIsyeri', data: [{x: 12, y: 12, r: 16}], backgroundColor: chartColors[4] },
+                    { label: 'TblKategori', data: [{x: 30, y: 30, r: 10}], backgroundColor: chartColors[5] },
+                    { label: 'TblResimm', data: [{x: 5, y: 5, r: 12}], backgroundColor: chartColors[0], alpha: 0.7 },
+                    { label: 'TblAdmin', data: [{x: 35, y: 5, r: 11}], backgroundColor: chartColors[1], alpha: 0.7 },
+                    { label: 'TblIslem', data: [{x: 22, y: 28, r: 15}], backgroundColor: chartColors[2], alpha: 0.7 },
+                ]
+            },
+            options: { ...commonChartOptions,
+                scales: {
+                    x: { type: 'linear', position: 'bottom', display: false },
+                    y: { display: false }
+                }
+            }
+        });
+        
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('#navbar a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

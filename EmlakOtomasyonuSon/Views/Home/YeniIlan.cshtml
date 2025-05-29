@@ -1,0 +1,48 @@
+﻿@model List<EmlakOtomasyonuSon.Models.TblKategori>
+
+@{
+    ViewData["Title"] = "Yeni İlan";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">İlan Kategorisi Seçin</h2>
+    <div class="row">
+        @foreach (var kategori in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@kategori.KategoriAd.Trim()</h5>
+                        <p class="card-text">@kategori.KategoriAd.Trim() kategorisinde yeni ilan eklemek için tıklayın.</p>
+                        <a href="@Url.Action("YeniIlanDetay", "Home", new { id = kategori.IlanKategoriId })"
+                           class="btn btn-primary"
+                           data-kategori-id="@kategori.IlanKategoriId"
+                           data-kategori-ad="@kategori.KategoriAd">
+                            İlan Ekle
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Kategori seçildiğinde
+            $('.btn-primary').click(function (e) {
+                e.preventDefault();
+                var kategoriId = $(this).data('kategori-id');
+                var kategoriAd = $(this).data('kategori-ad');
+
+                // Seçilen kategoriyi localStorage'a kaydet
+                localStorage.setItem('secilenKategoriId', kategoriId);
+                localStorage.setItem('secilenKategoriAd', kategoriAd);
+
+                // YeniIlanDetay sayfasına yönlendir
+                window.location.href = $(this).attr('href');
+            });
+        });
+    </script>
+} 

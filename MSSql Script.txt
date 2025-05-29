@@ -1,0 +1,303 @@
+USE [EmlakOtomasyonuDB]
+GO
+/****** Object:  Table [dbo].[__EFMigrationsHistory]    Script Date: 28.05.2025 17:30:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[__EFMigrationsHistory](
+	[MigrationId] [nvarchar](150) NOT NULL,
+	[ProductVersion] [nvarchar](32) NOT NULL,
+ CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY CLUSTERED 
+(
+	[MigrationId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Tbl_ArsaOzellikleri]    Script Date: 28.05.2025 17:30:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Tbl_ArsaOzellikleri](
+	[arsaOzellikId] [int] IDENTITY(1,1) NOT NULL,
+	[metrekare] [decimal](18, 2) NULL,
+	[metrekareFiyatı] [int] NULL,
+	[imarDurumu] [nvarchar](50) NULL,
+	[tapuDurumu] [nvarchar](50) NULL,
+	[kullanimAmaci] [nvarchar](50) NULL,
+	[zeminYapisi] [nvarchar](50) NULL,
+	[elektrikVar] [bit] NULL,
+	[suVar] [bit] NULL,
+	[dogalgazVar] [bit] NULL,
+	[yolVar] [bit] NULL,
+	[ilanId] [int] NULL,
+ CONSTRAINT [PK_Tbl_ArsaOzellikleri] PRIMARY KEY CLUSTERED 
+(
+	[arsaOzellikId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Tbl_EvOzellikleri]    Script Date: 28.05.2025 17:30:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Tbl_EvOzellikleri](
+	[evOzellikId] [int] IDENTITY(1,1) NOT NULL,
+	[asansor] [bit] NULL,
+	[somine] [bit] NULL,
+	[mobilyaTakimi] [bit] NULL,
+	[dusKabini] [bit] NULL,
+	[klima] [bit] NULL,
+	[balkon] [bit] NULL,
+	[esyaliMi] [bit] NULL,
+	[jakuzi] [bit] NULL,
+	[otopark] [bit] NULL,
+	[oyunParki] [bit] NULL,
+	[guvenlik] [bit] NULL,
+	[kapici] [bit] NULL,
+	[yuzmeHavuzu] [bit] NULL,
+	[sporSalonu] [bit] NULL,
+	[siteİcerisindeMi] [bit] NULL,
+	[odaSayisi] [int] NULL,
+	[salonSayisi] [int] NULL,
+	[binaYasi] [int] NULL,
+	[bulunduguKat] [int] NULL,
+	[katSayisi] [int] NULL,
+	[isitmaTuru] [nchar](20) NULL,
+	[metrekare] [decimal](18, 2) NULL,
+	[metrekareFiyati] [float] NULL,
+	[ilanId] [int] NULL,
+ CONSTRAINT [PK_Tbl_EvOzellikleri] PRIMARY KEY CLUSTERED 
+(
+	[evOzellikId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Tbl_Ilan]    Script Date: 28.05.2025 17:30:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Tbl_Ilan](
+	[ilanId] [int] IDENTITY(1,1) NOT NULL,
+	[ilanBaslik] [nvarchar](100) NULL,
+	[ilanFiyat] [int] NULL,
+	[ilanTarih] [datetime] NULL,
+	[ilanKategoriId] [int] NULL,
+	[ilanIslemId] [int] NULL,
+	[ilanVResim] [nvarchar](500) NULL,
+	[ilanAciklama] [nvarchar](1000) NULL,
+	[ilanTelefon] [nvarchar](20) NULL,
+ CONSTRAINT [PK_Tbl_Ilan] PRIMARY KEY CLUSTERED 
+(
+	[ilanId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Tbl_IlanIstek]    Script Date: 28.05.2025 17:30:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Tbl_IlanIstek](
+	[IstekId] [int] IDENTITY(1,1) NOT NULL,
+	[AdSoyad] [nvarchar](255) NOT NULL,
+	[Telefon] [nvarchar](50) NOT NULL,
+	[Email] [nvarchar](255) NOT NULL,
+	[Mesaj] [nvarchar](max) NOT NULL,
+	[IstekTarihi] [datetime2](7) NOT NULL,
+	[ilanId] [int] NOT NULL,
+	[Okundu] [bit] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[IstekId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Tbl_Islem]    Script Date: 28.05.2025 17:30:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Tbl_Islem](
+	[ilanIslemId] [int] IDENTITY(1,1) NOT NULL,
+	[islemAd] [nchar](20) NULL,
+ CONSTRAINT [PK_Tbl_Islem] PRIMARY KEY CLUSTERED 
+(
+	[ilanIslemId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Tbl_İsyeri]    Script Date: 28.05.2025 17:30:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Tbl_İsyeri](
+	[isyeriOzellikId] [int] IDENTITY(1,1) NOT NULL,
+	[asansor] [bit] NULL,
+	[klima] [bit] NULL,
+	[balkon] [bit] NULL,
+	[tuvalet] [bit] NULL,
+	[otopark] [bit] NULL,
+	[guvenlik] [bit] NULL,
+	[kapici] [bit] NULL,
+	[depo] [bit] NULL,
+	[metrekare] [decimal](18, 2) NULL,
+	[binaYasi] [int] NULL,
+	[bulunduguKat] [int] NULL,
+	[katSayisi] [int] NULL,
+	[isitmaTuru] [nvarchar](20) NULL,
+	[kullanimAmaci] [nchar](50) NULL,
+	[ilanId] [int] NULL,
+ CONSTRAINT [PK_Tbl_İsyeri] PRIMARY KEY CLUSTERED 
+(
+	[isyeriOzellikId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Tbl_Kategori]    Script Date: 28.05.2025 17:30:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Tbl_Kategori](
+	[ilanKategoriId] [int] IDENTITY(1,1) NOT NULL,
+	[kategoriAd] [nchar](20) NULL,
+ CONSTRAINT [PK_Tbl_Kategori] PRIMARY KEY CLUSTERED 
+(
+	[ilanKategoriId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Tbl_Resimm]    Script Date: 28.05.2025 17:30:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Tbl_Resimm](
+	[resimId] [int] IDENTITY(1,1) NOT NULL,
+	[resimAd] [nchar](250) NULL,
+	[resimYolu] [nchar](500) NULL,
+	[ilanId] [int] NULL,
+ CONSTRAINT [PK_Tbl_Resimm] PRIMARY KEY CLUSTERED 
+(
+	[resimId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TblAdmin]    Script Date: 28.05.2025 17:30:00 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TblAdmin](
+	[adminId] [int] IDENTITY(1,1) NOT NULL,
+	[adminAd] [nvarchar](20) NULL,
+	[adminSoyad] [nvarchar](20) NULL,
+	[adminKullaniciAdi] [nvarchar](20) NULL,
+	[adminSifre] [nvarchar](20) NULL,
+ CONSTRAINT [PK_TblAdmin] PRIMARY KEY CLUSTERED 
+(
+	[adminId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET IDENTITY_INSERT [dbo].[Tbl_ArsaOzellikleri] ON 
+
+INSERT [dbo].[Tbl_ArsaOzellikleri] ([arsaOzellikId], [metrekare], [metrekareFiyatı], [imarDurumu], [tapuDurumu], [kullanimAmaci], [zeminYapisi], [elektrikVar], [suVar], [dogalgazVar], [yolVar], [ilanId]) VALUES (3, CAST(15000.00 AS Decimal(18, 2)), 12, N'a', N'a', N'a', N'a', 0, 1, 0, 0, 17)
+SET IDENTITY_INSERT [dbo].[Tbl_ArsaOzellikleri] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Tbl_EvOzellikleri] ON 
+
+INSERT [dbo].[Tbl_EvOzellikleri] ([evOzellikId], [asansor], [somine], [mobilyaTakimi], [dusKabini], [klima], [balkon], [esyaliMi], [jakuzi], [otopark], [oyunParki], [guvenlik], [kapici], [yuzmeHavuzu], [sporSalonu], [siteİcerisindeMi], [odaSayisi], [salonSayisi], [binaYasi], [bulunduguKat], [katSayisi], [isitmaTuru], [metrekare], [metrekareFiyati], [ilanId]) VALUES (9, NULL, 1, 1, 1, 1, 1, NULL, NULL, 1, NULL, 1, NULL, 1, NULL, NULL, 9, 2, 6, NULL, 2, N'Doğalgaz            ', CAST(360.00 AS Decimal(18, 2)), NULL, 14)
+INSERT [dbo].[Tbl_EvOzellikleri] ([evOzellikId], [asansor], [somine], [mobilyaTakimi], [dusKabini], [klima], [balkon], [esyaliMi], [jakuzi], [otopark], [oyunParki], [guvenlik], [kapici], [yuzmeHavuzu], [sporSalonu], [siteİcerisindeMi], [odaSayisi], [salonSayisi], [binaYasi], [bulunduguKat], [katSayisi], [isitmaTuru], [metrekare], [metrekareFiyati], [ilanId]) VALUES (10, 1, NULL, 1, NULL, 1, 1, 1, NULL, 1, 1, NULL, 1, NULL, NULL, 1, 3, 1, 15, 5, 6, N'Doğalgaz            ', CAST(120.00 AS Decimal(18, 2)), NULL, 16)
+SET IDENTITY_INSERT [dbo].[Tbl_EvOzellikleri] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Tbl_Ilan] ON 
+
+INSERT [dbo].[Tbl_Ilan] ([ilanId], [ilanBaslik], [ilanFiyat], [ilanTarih], [ilanKategoriId], [ilanIslemId], [ilanVResim], [ilanAciklama], [ilanTelefon]) VALUES (14, N'Lüks satılık  müstakil dubleks villa', 7500000, CAST(N'2025-05-23T14:56:53.693' AS DateTime), 1, 1, N'/images/d85545fe-cb01-454b-83b2-5da48c606294.jpg', N'Kullanışlı , temiz ve şehirden uzak aile dostu bir evdir evimiz. ', N'05550473072')
+INSERT [dbo].[Tbl_Ilan] ([ilanId], [ilanBaslik], [ilanFiyat], [ilanTarih], [ilanKategoriId], [ilanIslemId], [ilanVResim], [ilanAciklama], [ilanTelefon]) VALUES (15, N'Veysel Elicimriden İşlerinize yardımcı 1800 metrekare tekstil firması', 3, CAST(N'2025-05-23T15:00:48.687' AS DateTime), 2, 1, N'/images/f63c53a7-c1a5-4996-93c2-a6358f87085a.jpg', N'veysel elibol
+', N'05529243992')
+INSERT [dbo].[Tbl_Ilan] ([ilanId], [ilanBaslik], [ilanFiyat], [ilanTarih], [ilanKategoriId], [ilanIslemId], [ilanVResim], [ilanAciklama], [ilanTelefon]) VALUES (16, N'Kiralık 3+1 daire', 15000, CAST(N'2025-05-23T15:06:48.563' AS DateTime), 1, 2, N'/images/110e6f38-2106-4c54-b5b6-832b2852079f.jpeg', N'alın hayrını görün', N'05550473072')
+INSERT [dbo].[Tbl_Ilan] ([ilanId], [ilanBaslik], [ilanFiyat], [ilanTarih], [ilanKategoriId], [ilanIslemId], [ilanVResim], [ilanAciklama], [ilanTelefon]) VALUES (17, N'Yusuf Bağcıdan Tarıma elverişli 8000 metrekare arsa', 15000000, CAST(N'2025-05-23T15:08:57.203' AS DateTime), 3, 1, N'/images/ddc7a6a9-74b7-4c01-8e3a-8e833f7c80b0.jpeg', N'dolandırılma garantili çiftlik bank yan sanayi kurucusu bleyder köyünden 15000 metrekare arsa', N'05550473072')
+SET IDENTITY_INSERT [dbo].[Tbl_Ilan] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Tbl_IlanIstek] ON 
+
+INSERT [dbo].[Tbl_IlanIstek] ([IstekId], [AdSoyad], [Telefon], [Email], [Mesaj], [IstekTarihi], [ilanId], [Okundu]) VALUES (1, N'veysel elibol', N'05550473072', N'harunal4772@gmail.com', N'a', CAST(N'2025-05-28T16:37:21.8337035' AS DateTime2), 17, 0)
+INSERT [dbo].[Tbl_IlanIstek] ([IstekId], [AdSoyad], [Telefon], [Email], [Mesaj], [IstekTarihi], [ilanId], [Okundu]) VALUES (2, N'veysel elibol', N'05529243992', N'harunal4772@gmail.com', N'a', CAST(N'2025-05-28T17:10:58.0943685' AS DateTime2), 14, 0)
+SET IDENTITY_INSERT [dbo].[Tbl_IlanIstek] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Tbl_Islem] ON 
+
+INSERT [dbo].[Tbl_Islem] ([ilanIslemId], [islemAd]) VALUES (1, N'Satılık             ')
+INSERT [dbo].[Tbl_Islem] ([ilanIslemId], [islemAd]) VALUES (2, N'Kiralık             ')
+SET IDENTITY_INSERT [dbo].[Tbl_Islem] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Tbl_İsyeri] ON 
+
+INSERT [dbo].[Tbl_İsyeri] ([isyeriOzellikId], [asansor], [klima], [balkon], [tuvalet], [otopark], [guvenlik], [kapici], [depo], [metrekare], [binaYasi], [bulunduguKat], [katSayisi], [isitmaTuru], [kullanimAmaci], [ilanId]) VALUES (4, 1, 1, 0, 1, 1, 1, 0, 1, CAST(1800.00 AS Decimal(18, 2)), 3, NULL, 3, N'Doğalgaz', N'Tekstil işyeri                                    ', 15)
+SET IDENTITY_INSERT [dbo].[Tbl_İsyeri] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Tbl_Kategori] ON 
+
+INSERT [dbo].[Tbl_Kategori] ([ilanKategoriId], [kategoriAd]) VALUES (1, N'Ev                  ')
+INSERT [dbo].[Tbl_Kategori] ([ilanKategoriId], [kategoriAd]) VALUES (2, N'İşyeri              ')
+INSERT [dbo].[Tbl_Kategori] ([ilanKategoriId], [kategoriAd]) VALUES (3, N'Arsa                ')
+SET IDENTITY_INSERT [dbo].[Tbl_Kategori] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Tbl_Resimm] ON 
+
+INSERT [dbo].[Tbl_Resimm] ([resimId], [resimAd], [resimYolu], [ilanId]) VALUES (77, N'ev8.jpeg                                                                                                                                                                                                                                                  ', N'/images/e2d36ac3-afd1-48a2-a837-24bf541fb6c4.jpeg                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ', 14)
+INSERT [dbo].[Tbl_Resimm] ([resimId], [resimAd], [resimYolu], [ilanId]) VALUES (78, N'ev5.jpeg                                                                                                                                                                                                                                                  ', N'/images/831f987e-5916-4579-a62a-e693e0a91db0.jpeg                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ', 14)
+INSERT [dbo].[Tbl_Resimm] ([resimId], [resimAd], [resimYolu], [ilanId]) VALUES (79, N'ev9.jpeg                                                                                                                                                                                                                                                  ', N'/images/9ab67586-5aed-454c-8821-fb0d03fc6c6a.jpeg                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ', 14)
+INSERT [dbo].[Tbl_Resimm] ([resimId], [resimAd], [resimYolu], [ilanId]) VALUES (80, N'soydan-hidrolik-fabrika.jpg                                                                                                                                                                                                                               ', N'/images/c26df7c1-21cb-4b63-839f-e348d1103cf3.jpg                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ', 15)
+INSERT [dbo].[Tbl_Resimm] ([resimId], [resimAd], [resimYolu], [ilanId]) VALUES (81, N'ev7.jpeg                                                                                                                                                                                                                                                  ', N'/images/d5a68272-6083-4ede-afa6-8468a69e26f3.jpeg                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ', 16)
+INSERT [dbo].[Tbl_Resimm] ([resimId], [resimAd], [resimYolu], [ilanId]) VALUES (82, N'arsa2.jpeg                                                                                                                                                                                                                                                ', N'/images/d524d678-cb4a-4ab8-9628-ffdbf36d8f1b.jpeg                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ', 17)
+SET IDENTITY_INSERT [dbo].[Tbl_Resimm] OFF
+GO
+SET IDENTITY_INSERT [dbo].[TblAdmin] ON 
+
+INSERT [dbo].[TblAdmin] ([adminId], [adminAd], [adminSoyad], [adminKullaniciAdi], [adminSifre]) VALUES (1, N'Harun', N'Al', N'icardi99', N'1905')
+SET IDENTITY_INSERT [dbo].[TblAdmin] OFF
+GO
+ALTER TABLE [dbo].[Tbl_IlanIstek] ADD  DEFAULT ((0)) FOR [Okundu]
+GO
+ALTER TABLE [dbo].[Tbl_ArsaOzellikleri]  WITH CHECK ADD  CONSTRAINT [FK_Tbl_ArsaOzellikleri_Tbl_Ilan] FOREIGN KEY([ilanId])
+REFERENCES [dbo].[Tbl_Ilan] ([ilanId])
+GO
+ALTER TABLE [dbo].[Tbl_ArsaOzellikleri] CHECK CONSTRAINT [FK_Tbl_ArsaOzellikleri_Tbl_Ilan]
+GO
+ALTER TABLE [dbo].[Tbl_EvOzellikleri]  WITH CHECK ADD  CONSTRAINT [FK_Tbl_EvOzellikleri_Tbl_Ilan] FOREIGN KEY([ilanId])
+REFERENCES [dbo].[Tbl_Ilan] ([ilanId])
+GO
+ALTER TABLE [dbo].[Tbl_EvOzellikleri] CHECK CONSTRAINT [FK_Tbl_EvOzellikleri_Tbl_Ilan]
+GO
+ALTER TABLE [dbo].[Tbl_Ilan]  WITH CHECK ADD  CONSTRAINT [FK_Tbl_Ilan_Tbl_Islem] FOREIGN KEY([ilanIslemId])
+REFERENCES [dbo].[Tbl_Islem] ([ilanIslemId])
+GO
+ALTER TABLE [dbo].[Tbl_Ilan] CHECK CONSTRAINT [FK_Tbl_Ilan_Tbl_Islem]
+GO
+ALTER TABLE [dbo].[Tbl_Ilan]  WITH CHECK ADD  CONSTRAINT [FK_Tbl_Ilan_Tbl_Kategori] FOREIGN KEY([ilanKategoriId])
+REFERENCES [dbo].[Tbl_Kategori] ([ilanKategoriId])
+GO
+ALTER TABLE [dbo].[Tbl_Ilan] CHECK CONSTRAINT [FK_Tbl_Ilan_Tbl_Kategori]
+GO
+ALTER TABLE [dbo].[Tbl_IlanIstek]  WITH CHECK ADD  CONSTRAINT [FK_Tbl_IlanIstek_Tbl_Ilan] FOREIGN KEY([ilanId])
+REFERENCES [dbo].[Tbl_Ilan] ([ilanId])
+GO
+ALTER TABLE [dbo].[Tbl_IlanIstek] CHECK CONSTRAINT [FK_Tbl_IlanIstek_Tbl_Ilan]
+GO
+ALTER TABLE [dbo].[Tbl_İsyeri]  WITH CHECK ADD  CONSTRAINT [FK_Tbl_İsyeri_Tbl_Ilan] FOREIGN KEY([ilanId])
+REFERENCES [dbo].[Tbl_Ilan] ([ilanId])
+GO
+ALTER TABLE [dbo].[Tbl_İsyeri] CHECK CONSTRAINT [FK_Tbl_İsyeri_Tbl_Ilan]
+GO
+ALTER TABLE [dbo].[Tbl_Resimm]  WITH CHECK ADD  CONSTRAINT [FK_Tbl_Resimm_Tbl_Ilan] FOREIGN KEY([ilanId])
+REFERENCES [dbo].[Tbl_Ilan] ([ilanId])
+GO
+ALTER TABLE [dbo].[Tbl_Resimm] CHECK CONSTRAINT [FK_Tbl_Resimm_Tbl_Ilan]
+GO

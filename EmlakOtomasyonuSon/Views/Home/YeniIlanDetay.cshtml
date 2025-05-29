@@ -1,0 +1,558 @@
+﻿@model EmlakOtomasyonuSon.Models.IlanDetayViewModel
+
+@{
+    ViewData["Title"] = "Yeni İlan";
+    var kategoriId = Model.Ilan.IlanKategoriId;
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card bg-dark text-white">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Yeni İlan Ekle</h2>
+
+                    <form asp-action="YeniIlanDetay" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Ilan.IlanKategoriId" />
+
+                        <div class="mb-3">
+                            <label asp-for="Ilan.IlanBaslik" class="form-label">İlan Başlığı</label>
+                            <input asp-for="Ilan.IlanBaslik" class="form-control" />
+                            <span asp-validation-for="Ilan.IlanBaslik" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Ilan.IlanFiyat" class="form-label">Fiyat</label>
+                            <input asp-for="Ilan.IlanFiyat" class="form-control" type="number" />
+                            <span asp-validation-for="Ilan.IlanFiyat" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Ilan.IlanTelefon" class="form-label">Telefon</label>
+                            <input asp-for="Ilan.IlanTelefon" class="form-control" />
+                            <span asp-validation-for="Ilan.IlanTelefon" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Ilan.IlanAciklama" class="form-label">Açıklama</label>
+                            <textarea asp-for="Ilan.IlanAciklama" class="form-control" rows="4"></textarea>
+                            <span asp-validation-for="Ilan.IlanAciklama" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Ilan.IlanIslemId" class="form-label">İşlem Türü</label>
+                            <select asp-for="Ilan.IlanIslemId" class="form-control" asp-items="ViewBag.Islemler">
+                                <option value="">Seçiniz</option>
+                            </select>
+                            <span asp-validation-for="Ilan.IlanIslemId" class="text-danger"></span>
+                        </div>
+
+                        @if (kategoriId == 1)
+                        {
+                            <div class="mb-4">
+                                <h4 class="mb-3">Ev Özellikleri</h4>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Oda Sayısı</label>
+                                            <input type="text" name="EvOzellikleri.OdaSayisi" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Salon Sayısı</label>
+                                            <input type="text" name="EvOzellikleri.SalonSayisi" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Bina Yaşı</label>
+                                            <input type="number" name="EvOzellikleri.BinaYasi" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Bulunduğu Kat</label>
+                                            <input type="number" name="EvOzellikleri.BulunduguKat" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Kat Sayısı</label>
+                                            <input type="number" name="EvOzellikleri.KatSayisi" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Isıtma Türü</label>
+                                            <input type="text" name="EvOzellikleri.IsitmaTuru" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Metrekare</label>
+                                            <input type="number" name="EvOzellikleri.Metrekare" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Metrekare Fiyatı</label>
+                                            <input type="number" name="EvOzellikleri.MetrekareFiyati" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input type="checkbox" name="EvOzellikleri.Asansor" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Asansör</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="EvOzellikleri.Somine" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Şömine</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="EvOzellikleri.MobilyaTakimi" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Mobilya Takımı</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="EvOzellikleri.DusKabini" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Duş Kabini</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="EvOzellikleri.Klima" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Klima</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="EvOzellikleri.Balkon" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Balkon</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="EvOzellikleri.EsyaliMi" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Eşyalı</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="EvOzellikleri.Jakuzi" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Jakuzi</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="EvOzellikleri.Otopark" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Otopark</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="EvOzellikleri.OyunParki" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Oyun Parkı</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="EvOzellikleri.Guvenlik" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Güvenlik</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="EvOzellikleri.Kapici" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Kapıcı</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="EvOzellikleri.YuzmeHavuzu" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Yüzme Havuzu</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="EvOzellikleri.SporSalonu" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Spor Salonu</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="EvOzellikleri.SiteİcerisindeMi" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Site İçerisinde</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        @if (kategoriId == 2)
+                        {
+                            <div class="mb-4">
+                                <h4 class="mb-3">İşyeri Özellikleri</h4>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Metrekare</label>
+                                            <input type="number" name="IsyeriOzellikleri.Metrekare" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Bina Yaşı</label>
+                                            <input type="number" name="IsyeriOzellikleri.BinaYasi" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Bulunduğu Kat</label>
+                                            <input type="number" name="IsyeriOzellikleri.BulunduguKat" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Kat Sayısı</label>
+                                            <input type="number" name="IsyeriOzellikleri.KatSayisi" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Isıtma Türü</label>
+                                            <input type="text" name="IsyeriOzellikleri.IsitmaTuru" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Kullanım Amacı</label>
+                                            <input type="text" name="IsyeriOzellikleri.KullanimAmaci" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input type="checkbox" name="IsyeriOzellikleri.Asansor" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Asansör</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="IsyeriOzellikleri.Klima" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Klima</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="IsyeriOzellikleri.Balkon" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Balkon</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="IsyeriOzellikleri.Tuvalet" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Tuvalet</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="IsyeriOzellikleri.Otopark" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Otopark</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="IsyeriOzellikleri.Guvenlik" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Güvenlik</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="IsyeriOzellikleri.Kapici" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Kapıcı</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="IsyeriOzellikleri.Depo" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Depo</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        @if (kategoriId == 3)
+                        {
+                            <div class="mb-4">
+                                <h4 class="mb-3">Arsa Özellikleri</h4>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Metrekare</label>
+                                            <input type="number" name="ArsaOzellikleri.Metrekare" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Metrekare Fiyatı</label>
+                                            <input type="number" name="ArsaOzellikleri.MetrekareFiyati" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">İmar Durumu</label>
+                                            <input type="text" name="ArsaOzellikleri.ImarDurumu" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Tapu Durumu</label>
+                                            <input type="text" name="ArsaOzellikleri.TapuDurumu" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Zemin Yapısı</label>
+                                            <input type="text" name="ArsaOzellikleri.ZeminYapisi" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="form-label">Kullanım Amacı</label>
+                                            <input type="text" name="ArsaOzellikleri.KullanimAmaci" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input type="checkbox" name="ArsaOzellikleri.ElektrikVar" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Elektrik Var</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="ArsaOzellikleri.SuVar" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Su Var</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="ArsaOzellikleri.DogalgazVar" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Doğalgaz Var</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="ArsaOzellikleri.YolVar" value="true" class="form-check-input" />
+                                            <label class="form-check-label">Yol Var</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="mb-4">
+                            <h4 class="mb-3">Resimler</h4>
+                            <div class="mb-3">
+                                <label class="form-label">Vitrin Resmi</label>
+                                <input type="file" name="Resim" class="form-control" accept="image/*" />
+                            </div>
+
+                            <div class="card mt-4">
+                                <div class="card-header">
+                                    <h5>Detay Fotoğrafları <small class="text-muted">(En az 3, en fazla 12 fotoğraf)</small></h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row" id="photoUploadContainer">
+                                        @for (int i = 0; i < 12; i++)
+                                        {
+                                            <div class="col-md-3 col-sm-4 col-6 mb-3">
+                                                <div class="photo-upload-box @(i < 3 ? "required" : "")" data-index="@i">
+                                                    <input type="file" id="photo-@i" name="DetayResimleri" accept="image/*" class="photo-input" style="display:none;" onchange="previewImage(this, @i)" />
+                                                    <div class="photo-preview" onclick="document.getElementById('photo-@i').click()">
+                                                        <i class="fas fa-plus-circle"></i>
+                                                        <span>Fotoğraf Ekle</span>
+                                                        <img src="" class="preview-img" style="display:none;" />
+                                                    </div>
+                                                    <button type="button" class="btn btn-sm btn-danger remove-photo" style="display:none;" onclick="removePhoto(@i)">Kaldır</button>
+                                                    @if (i < 3)
+                                                    {
+                                                        <div class="required-badge">Zorunlu</div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="text-danger" id="photo-validation-message"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>İlanı Kaydet
+                            </button>
+                            <a asp-action="Ilanlarim" class="btn btn-outline-light">
+                                <i class="fas fa-arrow-left me-2"></i>İlanlarıma Dön
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // Yüklenen fotoğraf sayısını takip etmek için
+        let uploadedPhotoCount = 0;
+
+        // Fotoğraf önizleme fonksiyonu
+        function previewImage(input, index) {
+            const box = document.querySelector(`.photo-upload-box[data-index="${index}"]`);
+            const previewImg = box.querySelector('.preview-img');
+            const removeBtn = box.querySelector('.remove-photo');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = 'block';
+                    removeBtn.style.display = 'block';
+                    box.classList.add('has-image');
+
+                    if (!box.hasAttribute('data-counted')) {
+                        uploadedPhotoCount++;
+                        box.setAttribute('data-counted', 'true');
+                    }
+
+                    validatePhotos();
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Fotoğraf kaldırma fonksiyonu
+        function removePhoto(index) {
+            const box = document.querySelector(`.photo-upload-box[data-index="${index}"]`);
+            const input = document.getElementById(`photo-${index}`);
+            const previewImg = box.querySelector('.preview-img');
+            const removeBtn = box.querySelector('.remove-photo');
+
+            input.value = '';
+            previewImg.src = '';
+            previewImg.style.display = 'none';
+            removeBtn.style.display = 'none';
+            box.classList.remove('has-image');
+
+            if (box.hasAttribute('data-counted')) {
+                uploadedPhotoCount--;
+                box.removeAttribute('data-counted');
+            }
+
+            validatePhotos();
+        }
+
+        // Fotoğraf sayısını doğrulama
+        function validatePhotos() {
+            const validationMsg = document.getElementById('photo-validation-message');
+            const submitBtn = document.querySelector('button[type="submit"]');
+
+            if (uploadedPhotoCount < 3) {
+                validationMsg.textContent = 'En az 3 fotoğraf yüklemelisiniz!';
+                submitBtn.disabled = true;
+            } else {
+                validationMsg.textContent = '';
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Form gönderimi öncesi kontrol
+        document.querySelector('form').addEventListener('submit', function (e) {
+            if (uploadedPhotoCount < 3) {
+                e.preventDefault();
+                alert('En az 3 fotoğraf yüklemelisiniz!');
+                return false;
+            }
+            return true;
+        });
+
+        // Sayfa yüklendiğinde doğrulama kontrolü yap
+        document.addEventListener('DOMContentLoaded', validatePhotos);
+    </script>
+}
+
+<style>
+    .form-control {
+        background-color: #2d2d2d;
+        border: 1px solid #404040;
+        color: white;
+    }
+
+        .form-control:focus {
+            background-color: #2d2d2d;
+            border-color: #007bff;
+            color: white;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: #6c757d;
+        }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-outline-light:hover {
+        background-color: #404040;
+    }
+
+    .form-check-input {
+        background-color: #2d2d2d;
+        border-color: #404040;
+    }
+
+        .form-check-input:checked {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+    /* Fotoğraf Yükleme Kutuları Stileri */
+    .photo-upload-box {
+        border: 2px dashed #aaa;
+        border-radius: 8px;
+        height: 160px;
+        position: relative;
+        transition: all 0.3s;
+        overflow: hidden;
+    }
+
+        .photo-upload-box.required {
+            border-color: #dc3545;
+        }
+
+        .photo-upload-box:hover {
+            border-color: #007bff;
+            cursor: pointer;
+        }
+
+    .photo-preview {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        text-align: center;
+        padding: 10px;
+        color: #777;
+    }
+
+        .photo-preview i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+    .preview-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .remove-photo {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        z-index: 10;
+    }
+
+    .required-badge {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        background-color: #dc3545;
+        color: white;
+        font-size: 10px;
+        padding: 2px 5px;
+        border-radius: 3px;
+        z-index: 10;
+    }
+
+    .photo-upload-box.has-image .photo-preview i,
+    .photo-upload-box.has-image .photo-preview span {
+        display: none;
+    }
+</style>
